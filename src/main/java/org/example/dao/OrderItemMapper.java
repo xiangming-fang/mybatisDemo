@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 import org.example.domain.OrderItem;
-import org.example.domain.Product;
 
 /**
  * Created on 2020-10-29

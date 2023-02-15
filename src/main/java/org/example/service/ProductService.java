@@ -7,7 +7,6 @@ import org.example.DaoUtils;
 import org.example.dao.ProductMapper;
 import org.example.domain.Product;
 
-import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 
