@@ -2,9 +2,6 @@ package org.example;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.function.Function;
 
 import org.apache.ibatis.io.Resources;
@@ -12,15 +9,13 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
-import com.mysql.cj.xdevapi.SessionFactory;
-
 
 /**
  * Created on 2020-10-30
  */
 public class DaoUtils {
 
-    private static SqlSessionFactory factory;
+    private static final SqlSessionFactory SQL_SESSION_FACTORY;
 
     static {
         String resource = "mybatis-config.xml";
@@ -33,13 +28,13 @@ public class DaoUtils {
             System.exit(1);
         }
         // 加载mybatis-config.xml配置文件，并创建SqlSessionFactory对象
-        factory = new SqlSessionFactoryBuilder()
+        SQL_SESSION_FACTORY = new SqlSessionFactoryBuilder()
                 .build(inputStream);
     }
 
     public static <R> R execute(Function<SqlSession, R> function) {
         // 创建SqlSession
-        SqlSession session = factory.openSession();
+        SqlSession session = SQL_SESSION_FACTORY.openSession();
         try {
             R apply = function.apply(session);
             // 提交事务
@@ -54,5 +49,9 @@ public class DaoUtils {
             // 关闭SqlSession
             session.close();
         }
+    }
+
+    public static SqlSession getSqlSession(){
+        return SQL_SESSION_FACTORY.openSession();
     }
 }

@@ -5,7 +5,7 @@
 
     <properties> <!-- 定义属性值 -->
         <property name="username" value="root"/>
-        <property name="id" value="xxx"/>
+        <property name="id" value="123456"/>
     </properties>
     <settings><!-- 全局配置信息 -->
         <setting name="cacheEnabled" value="true"/>
@@ -13,11 +13,13 @@
     <typeAliases>
         <!-- 配置别名信息，在映射配置文件中可以直接使用Customer这个别名
             代替org.example.domain.Customer这个类 -->
-        <typeAlias type="org.example.domain.Customer" alias="Customer"/>
-        <typeAlias type="org.example.domain.Address" alias="Address"/>
-        <typeAlias type="org.example.domain.Order" alias="Order"/>
-        <typeAlias type="org.example.domain.OrderItem" alias="OrderItem"/>
-        <typeAlias type="org.example.domain.Product" alias="Product"/>
+<!--        <typeAlias type="org.example.domain.Customer" alias="Customer"/>-->
+<!--        <typeAlias type="org.example.domain.Address" alias="Address"/>-->
+<!--        <typeAlias type="org.example.domain.Order" alias="Order"/>-->
+<!--        <typeAlias type="org.example.domain.OrderItem" alias="OrderItem"/>-->
+<!--        <typeAlias type="org.example.domain.Product" alias="Product"/>-->
+        <!-- 不需要 一个个 定义，直接扫描 实体类包-->
+        <package name="org.example.domain"/>
     </typeAliases>
     <environments default="development">
         <environment id="development">
@@ -25,10 +27,10 @@
             <transactionManager type="JDBC"/>
             <!-- 配置数据源的类型，以及数据库连接的相关信息 -->
             <dataSource type="POOLED">
-                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
                 <property name="url" value="jdbc:mysql://localhost:3306/test"/>
                 <property name="username" value="root"/>
-                <property name="password" value="xxx"/>
+                <property name="password" value="123456"/>
             </dataSource>
         </environment>
     </environments>
@@ -39,5 +41,8 @@
         <mapper resource="mapper/OrderItemMapper.xml"/>
         <mapper resource="mapper/OrderMapper.xml"/>
         <mapper resource="mapper/ProductMapper.xml"/>
+        <!-- 直接扫描 mapper 接口包 -->
+        <!-- todo 为什么在这个项目里会失效呢 -->
+<!--        <package name="org.example.dao"/>-->
     </mappers>
 </configuration>

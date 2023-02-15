@@ -2,6 +2,7 @@ package org.example.service;
 
 import java.util.List;
 
+import org.apache.ibatis.session.SqlSession;
 import org.example.DaoUtils;
 import org.example.dao.AddressMapper;
 import org.example.dao.CustomerMapper;
@@ -22,18 +23,40 @@ public class CustomerService {
         Preconditions.checkArgument(!Strings.isNullOrEmpty(name), "name is empty");
         Preconditions.checkArgument(!Strings.isNullOrEmpty(phone), "phone is empty");
         // 我们还可以完成其他业务逻辑，例如检查用户名是否重复，手机号是否重复等等，这里不再展示
-        return DaoUtils.execute(sqlSession -> {
-            // 创建Customer对象，并通过CustomerMapper.save()方法完成持久化
+//        return DaoUtils.execute(sqlSession -> {
+//            // 创建Customer对象，并通过CustomerMapper.save()方法完成持久化
+//            CustomerMapper mapper = sqlSession.getMapper(CustomerMapper.class);
+//            Customer customer = new Customer();
+//            customer.setName(name);
+//            customer.setPhone(phone);
+//            int affected = mapper.save(customer);
+//            if (affected <= 0) {
+//                throw new RuntimeException("Save Customer fail...");
+//            }
+//            return customer.getId();
+//        });
+
+        SqlSession sqlSession = DaoUtils.getSqlSession();
+        long res = 0;
+        try {
             CustomerMapper mapper = sqlSession.getMapper(CustomerMapper.class);
             Customer customer = new Customer();
             customer.setName(name);
             customer.setPhone(phone);
             int affected = mapper.save(customer);
             if (affected <= 0) {
+                sqlSession.rollback();
                 throw new RuntimeException("Save Customer fail...");
             }
-            return customer.getId();
-        });
+            sqlSession.commit();
+            res = customer.getId();
+        }catch (Exception e){
+            sqlSession.rollback();
+            throw e;
+        }finally {
+            sqlSession.close();
+        }
+        return res;
     }
 
     // 用户添加一个新的送货地址

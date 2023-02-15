@@ -12,6 +12,7 @@ import org.example.service.CustomerService;
 import org.example.service.OrderService;
 import org.example.service.ProductService;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.google.common.collect.Lists;
